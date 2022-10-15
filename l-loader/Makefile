@@ -20,7 +20,8 @@ CC=$(CROSS_COMPILE)gcc
 LD=$(CROSS_COMPILE)ld
 OBJCOPY=$(CROSS_COMPILE)objcopy
 
-CFLAGS := -march=armv7-a
+#CFLAGS := -march=armv7-a
+CFLAGS := -march=armv7-a+fp
 ifeq ($(RECOVERY),1)
 CFLAGS += -DRECOVERY
 endif

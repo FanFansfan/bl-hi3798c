@@ -40,7 +40,7 @@ if [ "$1" = "RECOVERY" ]; then
 	echo "BUILD ATF WITH RECOVERY"
 	make -C atf CROSS_COMPILE=${CROSS_64} all fip \
 		DEBUG=${ATF_DEBUG} PLAT=poplar SPD=none BL33=../u-boot/u-boot.bin \
-		POPLAR_RECOVERY=1
+		POPLAR_RECOVERY=1 V=1
 else
 	make -C atf CROSS_COMPILE=${CROSS_64} all fip \
 		DEBUG=${ATF_DEBUG} PLAT=poplar SPD=none BL33=../u-boot/u-boot.bin
