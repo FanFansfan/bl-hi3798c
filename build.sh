@@ -21,7 +21,8 @@ else
 	exit 1
 fi
 make -C u-boot CROSS_COMPILE=${CROSS_64} clean
-make -j4 -C u-boot CROSS_COMPILE=${CROSS_64} KCFLAGS=-DBOARD_VARIANT=\"${BOARD}\"
+rm compile_commands.json -rf
+bear -- make -j4 -C u-boot CROSS_COMPILE=${CROSS_64} KCFLAGS=-DBOARD_VARIANT=\"${BOARD}\"
 
 if [ ! -f u-boot/u-boot.bin ]; then
 	echo "u-boot build failed!"
@@ -38,11 +39,11 @@ fi
 make -C atf distclean
 if [ "$1" = "RECOVERY" ]; then
 	echo "BUILD ATF WITH RECOVERY"
-	make -C atf CROSS_COMPILE=${CROSS_64} all fip \
+	bear --append -- make -C atf CROSS_COMPILE=${CROSS_64} all fip \
 		DEBUG=${ATF_DEBUG} PLAT=poplar SPD=none BL33=../u-boot/u-boot.bin \
 		POPLAR_RECOVERY=1 V=1
 else
-	make -C atf CROSS_COMPILE=${CROSS_64} all fip \
+	bear --append -- make -C atf CROSS_COMPILE=${CROSS_64} all fip \
 		DEBUG=${ATF_DEBUG} PLAT=poplar SPD=none BL33=../u-boot/u-boot.bin
 fi
 
@@ -58,10 +59,10 @@ make -C l-loader clean
 
 if [ "$1" = "RECOVERY" ]; then
 	echo "BUILD l-loader WITH RECOVERY"
-	make -C l-loader CROSS_COMPILE=${CROSS_32} DDR_REG=${BOARD}.reg \
+	bear --append -- make -C l-loader CROSS_COMPILE=${CROSS_32} DDR_REG=${BOARD}.reg \
 		ARM_TRUSTED_FIRMWARE=../atf RECOVERY=1
 else
-	make -C l-loader CROSS_COMPILE=${CROSS_32} DDR_REG=${BOARD}.reg \
+	bear --append -- make -C l-loader CROSS_COMPILE=${CROSS_32} DDR_REG=${BOARD}.reg \
 		ARM_TRUSTED_FIRMWARE=../atf
 fi
 
